@@ -1,0 +1,48 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "repo-explainer-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-03-18",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true
+  },
+  "vars": {
+    "ALLOWED_ORIGIN": "*",
+    "MAX_INDEXED_FILES": "300",
+    "MAX_INDEXED_BYTES": "6291456",
+    "MAX_FILE_BYTES": "204800"
+  },
+  "ai": {
+    "binding": "AI"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "repo-explainer-db",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "SESSION_COORDINATOR",
+        "class_name": "SessionCoordinator"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["SessionCoordinator"]
+    }
+  ],
+  "workflows": [
+    {
+      "name": "repo-indexing-workflow",
+      "binding": "INDEX_WORKFLOW",
+      "class_name": "RepoIndexWorkflow"
+    }
+  ]
+}
